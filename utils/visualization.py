@@ -59,7 +59,7 @@ def plot_confusion_matrix(
     save_path: Optional[str] = None,
     title: str = "Confusion Matrix",
 ) -> None:
-    """Render a normalised confusion matrix as a heatmap.
+    """Render a normalized confusion matrix as a heatmap.
 
     Args:
         cm: Square integer array of shape ``(num_classes, num_classes)``.

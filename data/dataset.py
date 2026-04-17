@@ -69,6 +69,11 @@ class MaizeDataset(ImageFolder):
 
     def __init__(self, root, transform=None):
         super().__init__(str(root), transform=transform)
+        # Pre-compute class counts for efficient weight calculations
+        counts = torch.zeros(len(self.classes))
+        for _, label in self.samples:
+            counts[label] += 1
+        self._class_counts = counts
 
     @property
     def class_weights(self) -> torch.Tensor:
@@ -77,10 +82,7 @@ class MaizeDataset(ImageFolder):
         Returns:
             1-D float tensor of length ``num_classes``.
         """
-        counts = torch.zeros(len(self.classes))
-        for _, label in self.samples:
-            counts[label] += 1
-        weights = 1.0 / counts.clamp(min=1)
+        weights = 1.0 / self._class_counts.clamp(min=1)
         return weights / weights.sum()
 
     def sample_weights(self) -> torch.Tensor:

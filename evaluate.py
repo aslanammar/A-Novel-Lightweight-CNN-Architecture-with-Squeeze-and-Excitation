@@ -47,14 +47,17 @@ def run_evaluation(model, loader, device, class_names):
     all_true, all_pred = [], []
     all_images = []
 
+    collected = 0
     for images, labels in loader:
         images_dev = images.to(device)
         outputs = model(images_dev)
         preds = outputs.argmax(dim=1).cpu()
         all_true.append(labels)
         all_pred.append(preds)
-        if len(all_images) < 8:
-            all_images.append(images[: max(0, 8 - sum(t.size(0) for t in all_images))])
+        if collected < 8:
+            take = min(images.size(0), 8 - collected)
+            all_images.append(images[:take])
+            collected += take
 
     all_true = torch.cat(all_true)
     all_pred = torch.cat(all_pred)

@@ -39,7 +39,7 @@ class TestAverageMeter:
     def test_weighted_update(self):
         m = AverageMeter()
         m.update(2.0, n=4)   # contributes 8
-        m.update(6.0, n=4)   # contributes 24  → avg = 32/8 = 4.0
+        m.update(6.0, n=4)   # contributes 24  -> avg = 32/8 = 4.0
         assert m.avg == pytest.approx(4.0)
 
     def test_reset(self):
@@ -79,7 +79,7 @@ class TestComputeMetrics:
         assert 0.0 <= metrics["accuracy"] <= 1.0
 
     def test_zero_accuracy(self):
-        """Prediction always wrong → accuracy = 0."""
+        """Prediction always wrong -> accuracy = 0."""
         y_true = torch.zeros(10, dtype=torch.long)
         y_pred = torch.ones(10, dtype=torch.long)
         metrics = compute_metrics(y_true, y_pred)
